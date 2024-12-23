@@ -1,21 +1,21 @@
 import { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, Platform } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import { Picker } from '@react-native-picker/picker';
-import { supabase } from '../lib/supabase';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { supabase } from '../../lib/supabase';
 
 export default function Index() {
   const [description, setDescription] = useState<string>('');
   const [amount, setAmount] = useState<string>('0');
-  const [paymentMethod, setPaymentMethod] = useState<string>('1');
-
-  const paymentMethods = {
-    '1': 'Food Voucher',
-    '2': 'Grocery Voucher',
-    '3': 'BBVA',
-    '4': 'Banamex',
-    '5': 'Nu'
-  };
+  const [open, setOpen] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('1');
+  const [items] = useState([
+    { label: 'Food Voucher', value: '1' },
+    { label: 'Grocery Voucher', value: '2' },
+    { label: 'BBVA', value: '3' },
+    { label: 'Banamex', value: '4' },
+    { label: 'Nu', value: '5' }
+  ]);
 
   const handleSubmit = async () => {
     try {
@@ -55,9 +55,15 @@ export default function Index() {
         value={amount}
         onChangeText={setAmount}
       />
-      <View style={styles.pickerContainer}>
-        <Picker.Item label="Nu" value="5" />
-      </View>
+      <DropDownPicker
+        open={open}
+        value={paymentMethod}
+        items={items}
+        setOpen={setOpen}
+        setValue={setPaymentMethod}
+        style={styles.dropdown}
+        containerStyle={styles.dropdownContainer}
+      />
       <Button
         title="Submit"
         onPress={handleSubmit}
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
   },
   buttonContainer: {
     marginHorizontal: 10,
@@ -84,14 +90,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
   },
-  pickerContainer: {
-    borderColor: '#999',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 20,
+  dropdownContainer: {
     marginHorizontal: 10,
+    marginBottom: 20,
   },
-  picker: {
-    height: 50,
+  dropdown: {
+    borderColor: '#999',
+    borderRadius: 8,
+    backgroundColor: '#fff',
   }
 });
