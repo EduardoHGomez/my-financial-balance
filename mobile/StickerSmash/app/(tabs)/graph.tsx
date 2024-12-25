@@ -1,9 +1,36 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { useState } from 'react';
 
-export default function AboutScreen() {
+export default function GraphScreen() {
+    const [selected, setSelected] = useState('1D');
+    const options = ['1D', '1W', '1M', '1Y', '5Y'];
+
+    const handleSelect = (value: string) => {
+        setSelected(value);
+        Alert.alert(`Selected: ${value}`);
+    };
+
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>About screen</Text>
+            <View style={styles.radioGroup}>
+                {options.map((option) => (
+                    <TouchableOpacity
+                        key={option}
+                        style={[
+                            styles.radioButton,
+                            selected === option && styles.radioButtonSelected
+                        ]}
+                        onPress={() => handleSelect(option)}
+                    >
+                        <Text style={[
+                            styles.radioButtonText,
+                            selected === option && styles.radioButtonTextSelected
+                        ]}>
+                            {option}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
         </View>
     );
 }
@@ -15,7 +42,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    text: {
+    radioGroup: {
+        flexDirection: 'row',
+        backgroundColor: '#333',
+        borderRadius: 8,
+        padding: 4,
+    },
+    radioButton: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        marginHorizontal: 2,
+    },
+    radioButtonSelected: {
+        backgroundColor: '#2196F3',
+    },
+    radioButtonText: {
         color: '#fff',
+        fontSize: 14,
+    },
+    radioButtonTextSelected: {
+        color: '#fff',
+        fontWeight: 'bold',
     },
 });
