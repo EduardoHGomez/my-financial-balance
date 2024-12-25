@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, Alert, Platform } from 'react-native';
+import { View, StyleSheet, Alert, Platform, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
@@ -9,6 +9,9 @@ export default function Index() {
   const [amount, setAmount] = useState<string>('0');
   const [open, setOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('1');
+  const [balance, setBalane] = useState('1000.00');
+  const [userName, setUserName] = useState('1000.00');
+
   const [items] = useState([
     { label: 'Food Voucher', value: '1' },
     { label: 'Grocery Voucher', value: '2' },
@@ -16,6 +19,10 @@ export default function Index() {
     { label: 'Banamex', value: '4' },
     { label: 'Nu', value: '5' }
   ]);
+
+  // Fetch with the purpose to get user's balance
+  // Using DUMMY TABLE -- change this
+
 
   const handleSubmit = async () => {
     try {
@@ -44,59 +51,70 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Input
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-      />
-      <Input
-        placeholder="Amount"
-        keyboardType="numeric"
-        value={amount}
-        onChangeText={setAmount}
-      />
-      <DropDownPicker
-        open={open}
-        value={paymentMethod}
-        items={items}
-        setOpen={setOpen}
-        setValue={setPaymentMethod}
-        style={styles.dropdown}
-        containerStyle={styles.dropdownContainer}
-      />
-      <Button
-        title="Submit"
-        onPress={handleSubmit}
-        buttonStyle={styles.button}
-        containerStyle={styles.buttonContainer}
-        disabled={!description || !amount}
-      />
+		<Text style={styles.balanceHeader}>
+			Hello, {userName} 
+		</Text>
+		<Text style={styles.balanceHeader}>
+			Balance: {balance} 
+		</Text>
+		
+		<Input
+			placeholder="Description"
+			value={description}
+			onChangeText={setDescription}
+		/>
+		<Input
+			placeholder="Amount"
+			keyboardType="numeric"
+			value={amount}
+			onChangeText={setAmount}
+		/>
+		<DropDownPicker
+			open={open}
+			value={paymentMethod}
+			items={items}
+			setOpen={setOpen}
+			setValue={setPaymentMethod}
+			style={styles.dropdown}
+			containerStyle={styles.dropdownContainer}
+		/>
+		<Button
+			title="Submit"
+			onPress={handleSubmit}
+			buttonStyle={styles.button}
+			containerStyle={styles.buttonContainer}
+			disabled={!description || !amount}
+		/>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  buttonContainer: {
-    marginHorizontal: 10,
-    marginTop: 10,
-  },
-  button: {
-    backgroundColor: '#2196F3',
-    borderRadius: 8,
-    padding: 12,
-  },
-  dropdownContainer: {
-    marginHorizontal: 10,
-    marginBottom: 20,
-  },
-  dropdown: {
-    borderColor: '#999',
-    borderRadius: 8,
-    backgroundColor: '#fff',
-  }
+	container: {
+		flex: 1,
+		padding: 20,
+		backgroundColor: 'white',
+	},
+	buttonContainer: {
+		marginHorizontal: 10,
+		marginTop: 10,
+	},
+	button: {
+		backgroundColor: '#2196F3',
+		borderRadius: 8,
+		padding: 12,
+	},
+	dropdownContainer: {
+		marginHorizontal: 10,
+		marginBottom: 20,
+	},
+	dropdown: {
+		borderColor: '#999',
+		borderRadius: 8,
+		backgroundColor: '#fff',
+	},
+	balanceHeader: {
+		fontSize: 20,
+		color: 'gray',
+	}
 });

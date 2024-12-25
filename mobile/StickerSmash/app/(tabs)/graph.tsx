@@ -10,6 +10,14 @@ export default function GraphScreen() {
         Alert.alert(`Selected: ${value}`);
     };
 
+
+
+    // Based on that button, get the range within that data
+    const retrieveData = async () => {
+
+
+    }; 
+
     return (
         <View style={styles.container}>
             <View style={styles.radioGroup}>
