@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, StyleSheet, Alert, Platform, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
 
 export default function Index() {
-  const [description, setDescription] = useState<string>('');
-  const [amount, setAmount] = useState<string>('0');
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState('');
   const [open, setOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('1');
-  const [balance, setBalane] = useState('1000.00');
+  const [balance, setBalance] = useState<number>(0);
   const [userName, setUserName] = useState('1000.00');
 
   const [items] = useState([
@@ -20,9 +20,29 @@ export default function Index() {
     { label: 'Nu', value: '5' }
   ]);
 
-  // Fetch with the purpose to get user's balance
-  // Using DUMMY TABLE -- change this
+  useEffect(() => {
+    getUserData();
+  }, []);
 
+  const getUserData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user')
+        .select('userName, balance')
+        .eq('name', 'Eduardo')
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setBalance(data.balance);
+        console.log('Username:', data.userName);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'Could not fetch user data');
+    }
+  };
 
   const handleSubmit = async () => {
     try {
