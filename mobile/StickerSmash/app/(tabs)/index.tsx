@@ -28,7 +28,7 @@ export default function Index() {
     try {
       const { data, error } = await supabase
         .from('user')
-        .select('userName, balance')
+        .select('name, balance')
         .eq('name', 'Eduardo')
         .single();
 
@@ -36,7 +36,8 @@ export default function Index() {
 
       if (data) {
         setBalance(data.balance);
-        console.log('Username:', data.userName);
+        setUserName(data.name);
+        console.log('Username:', data.name);
       }
     } catch (error) {
       console.error('Error:', error);
