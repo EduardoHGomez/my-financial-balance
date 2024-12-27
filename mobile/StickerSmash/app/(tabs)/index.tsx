@@ -3,6 +3,7 @@ import { View, StyleSheet, Alert, Platform, Text } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Index() {
   const [description, setDescription] = useState('');
@@ -12,17 +13,37 @@ export default function Index() {
   const [balance, setBalance] = useState<number>(0);
   const [userName, setUserName] = useState('1000.00');
 
-  const [items] = useState([
-    { label: 'Food Voucher', value: '1' },
-    { label: 'Grocery Voucher', value: '2' },
-    { label: 'BBVA', value: '3' },
-    { label: 'Banamex', value: '4' },
-    { label: 'Nu', value: '5' }
-  ]);
+  // Here useState any is used because the data is not known for a given array
+  const [paymentMethods, setPaymentMethods] = useState<any>([]);
 
   useEffect(() => {
     getUserData();
+	loadPayments();
   }, []);
+
+  const loadPayments = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('payment')
+        .select('*')
+        .order('name', { ascending: true });
+
+      if (error) throw error;
+
+      if (data) {
+        const newItems = data.map((item: any) => ({
+          label: item.name,
+          value: item.id,
+        }));
+        
+        console.log('Payment methods:', newItems);
+        setPaymentMethods(newItems);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'Could not fetch payment methods');
+    }
+  };
 
   const getUserData = async () => {
     try {
@@ -90,14 +111,26 @@ export default function Index() {
 			value={amount}
 			onChangeText={setAmount}
 		/>
-		<DropDownPicker
+		{paymentMethods && paymentMethods.length > 0 ? (
+			<DropDownPicker
 			open={open}
 			value={paymentMethod}
-			items={items}
+			items={paymentMethods}
 			setOpen={setOpen}
 			setValue={setPaymentMethod}
 			style={styles.dropdown}
 			containerStyle={styles.dropdownContainer}
+			zIndex={1000}
+			/>
+		) : (
+			<Text style={styles.loadingText}>Loading payment methods...</Text>
+		)}	
+		<Button
+			title="Submit"
+			onPress={handleSubmit}
+			buttonStyle={styles.button}
+			containerStyle={styles.buttonContainer}
+			disabled={!description || !amount}
 		/>
 		<Button
 			title="Submit"
@@ -137,5 +170,11 @@ const styles = StyleSheet.create({
 	balanceHeader: {
 		fontSize: 20,
 		color: 'gray',
-	}
+	},
+	loadingText: {
+		fontSize: 16,
+		color: 'gray',
+		textAlign: 'center',
+		marginVertical: 10,
+	},
 });

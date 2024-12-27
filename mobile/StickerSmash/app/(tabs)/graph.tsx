@@ -14,8 +14,7 @@ export default function GraphScreen() {
 
     // Based on that button, get the range within that data
     const retrieveData = async () => {
-
-
+        
     }; 
 
     return (
@@ -46,7 +45,7 @@ export default function GraphScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#25292e',
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
     },
