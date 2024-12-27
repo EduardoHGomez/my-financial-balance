@@ -12,6 +12,11 @@ export default function Index() {
   const [paymentMethod, setPaymentMethod] = useState('1');
   const [balance, setBalance] = useState<number>(0);
   const [userName, setUserName] = useState('1000.00');
+  const [foodVoucherBalance, setFoodVoucherBalance] = useState<number>(0);
+  const [groceryVoucherBalance, setGroceryVoucherBalance] = useState<number>(0);
+  const [bbvaBalance, setBbvaBalance] = useState<number>(0);
+  const [banamexBalance, setBanamexBalance] = useState<number>(0);
+  const [nuBalance, setNuBalance] = useState<number>(0);
 
   // Here useState any is used because the data is not known for a given array
   const [paymentMethods, setPaymentMethods] = useState<any>([]);
@@ -66,30 +71,30 @@ export default function Index() {
     }
   };
 
-  const handleSubmit = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('spending')
-        .insert([
-          {
-            description,
-            amount: Number(amount),
-            payment_method: parseInt(paymentMethod),
-          },
-        ])
-        .single();
+	const handleSubmit = async () => {
+		try {
+			const { data, error } = await supabase
+				.from('spending')
+				.insert([
+				{
+					description,
+					amount: Number(amount),
+					payment_method: parseInt(paymentMethod),
+				},
+				])
+				.single();
 
-      if (error) throw error;
+			if (error) throw error;
 
-      Alert.alert('Success', 'Transaction added successfully!');
-      setDescription('');
-      setAmount('0');
-      setPaymentMethod('1');
-    } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', 'Failed to add transaction');
-    }
-  };
+			Alert.alert('Success', 'Transaction added successfully!');
+			setDescription('');
+			setAmount('0');
+			setPaymentMethod('1');
+		} catch (error) {
+			console.error('Error:', error);
+			Alert.alert('Error', 'Failed to add transaction');
+		}
+	};
 
   return (
     <View style={styles.container}>
@@ -99,7 +104,23 @@ export default function Index() {
 		<Text style={styles.balanceHeader}>
 			Balance: {balance} 
 		</Text>
-		
+		<View style={styles.spacer} />
+		<Text style={styles.balanceHeader}>
+			Food Voucher: {foodVoucherBalance} 
+		</Text>
+		<Text style={styles.balanceHeader}>
+			Grocery Voucher: {groceryVoucherBalance} 
+		</Text>
+		<Text style={styles.balanceHeader}>
+			BBVA: {bbvaBalance} 
+		</Text>
+		<Text style={styles.balanceHeader}>
+			Banamex: {banamexBalance} 
+		</Text>
+		<Text style={styles.balanceHeader}>
+			Nu: {nuBalance} 
+		</Text>
+		<View style={styles.spacer} />
 		<Input
 			placeholder="Description"
 			value={description}
@@ -132,6 +153,7 @@ export default function Index() {
 			containerStyle={styles.buttonContainer}
 			disabled={!description || !amount}
 		/>
+		<View style={styles.spacer}/>
     </View>
   );
 }
@@ -170,4 +192,10 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		marginVertical: 10,
 	},
+	spacer: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
+    marginVertical: 15,
+    marginHorizontal: 10,
+  },
 });
