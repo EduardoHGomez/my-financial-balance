@@ -14,7 +14,7 @@ export default function GraphScreen() {
 
     // Based on that button, get the range within that data
     const retrieveData = async () => {
-        
+
     }; 
 
     return (
@@ -46,14 +46,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center',
+        padding: 12,
     },
     radioGroup: {
         flexDirection: 'row',
-        backgroundColor: '#333',
-        borderRadius: 8,
+        backgroundColor: 'white',
+        borderRadius: 12,
         padding: 4,
+        borderColor: '#999',
+        borderWidth: 1,
     },
     radioButton: {
         paddingVertical: 8,
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2196F3',
     },
     radioButtonText: {
-        color: '#fff',
+        color: 'black',
         fontSize: 14,
     },
     radioButtonTextSelected: {

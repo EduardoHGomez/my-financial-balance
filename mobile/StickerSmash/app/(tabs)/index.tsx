@@ -132,13 +132,6 @@ export default function Index() {
 			containerStyle={styles.buttonContainer}
 			disabled={!description || !amount}
 		/>
-		<Button
-			title="Submit"
-			onPress={handleSubmit}
-			buttonStyle={styles.button}
-			containerStyle={styles.buttonContainer}
-			disabled={!description || !amount}
-		/>
     </View>
   );
 }
