@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, StyleSheet, Alert, Platform, Text } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, Switch } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -12,11 +12,7 @@ export default function Index() {
   const [paymentMethod, setPaymentMethod] = useState('1');
   const [balance, setBalance] = useState<number>(0);
   const [userName, setUserName] = useState('1000.00');
-  const [foodVoucherBalance, setFoodVoucherBalance] = useState<number>(0);
-  const [groceryVoucherBalance, setGroceryVoucherBalance] = useState<number>(0);
-  const [bbvaBalance, setBbvaBalance] = useState<number>(0);
-  const [banamexBalance, setBanamexBalance] = useState<number>(0);
-  const [nuBalance, setNuBalance] = useState<number>(0);
+  const [isIncome, setIsIncome] = useState(false);
 
   // Here useState any is used because the data is not known for a given array
   const [paymentMethods, setPaymentMethods] = useState<any>([]);
@@ -72,13 +68,14 @@ export default function Index() {
   };
 
 	const handleSubmit = async () => {
+		const calculatedAmount = isIncome ? amount : -Math.abs(Number(amount));	
 		try {
 			const { data, error } = await supabase
 				.from('spending')
 				.insert([
 				{
 					description,
-					amount: Number(amount),
+					amount: Number(calculatedAmount),
 					payment_method: parseInt(paymentMethod),
 				},
 				])
@@ -104,23 +101,7 @@ export default function Index() {
 		<Text style={styles.balanceHeader}>
 			Balance: {balance} 
 		</Text>
-		<View style={styles.spacer} />
-		<Text style={styles.balanceHeader}>
-			Food Voucher: {foodVoucherBalance} 
-		</Text>
-		<Text style={styles.balanceHeader}>
-			Grocery Voucher: {groceryVoucherBalance} 
-		</Text>
-		<Text style={styles.balanceHeader}>
-			BBVA: {bbvaBalance} 
-		</Text>
-		<Text style={styles.balanceHeader}>
-			Banamex: {banamexBalance} 
-		</Text>
-		<Text style={styles.balanceHeader}>
-			Nu: {nuBalance} 
-		</Text>
-		<View style={styles.spacer} />
+		
 		<Input
 			placeholder="Description"
 			value={description}
@@ -146,6 +127,18 @@ export default function Index() {
 		) : (
 			<Text style={styles.loadingText}>Loading payment methods...</Text>
 		)}	
+		<View style={styles.toggleContainer}>
+			<Text style={[styles.toggleText, { color: isIncome ? '#4CAF50' : '#F44336' }]}>
+				{isIncome ? 'Income' : 'Expense'}
+			</Text>
+			<Switch
+				value={isIncome}
+				onValueChange={setIsIncome}
+				color="#4CAF50"
+				trackColor={{ false: '#F44336', true: '#4CAF50' }}
+				thumbColor="#ffffff"
+			/>
+		</View>
 		<Button
 			title="Submit"
 			onPress={handleSubmit}
@@ -198,4 +191,16 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     marginHorizontal: 10,
   },
+	toggleContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		marginHorizontal: 10,
+		marginVertical: 10,
+		paddingHorizontal: 10,
+	},
+	toggleText: {
+		fontSize: 16,
+		fontWeight: '500',
+	}
 });
