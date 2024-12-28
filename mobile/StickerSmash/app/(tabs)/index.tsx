@@ -13,6 +13,7 @@ export default function Index() {
   const [balance, setBalance] = useState<number>(0);
   const [userName, setUserName] = useState('1000.00');
   const [isIncome, setIsIncome] = useState(false);
+  const [paymentBalances, setPaymentBalances] = useState<any>([]);
 
   // Here useState any is used because the data is not known for a given array
   const [paymentMethods, setPaymentMethods] = useState<any>([]);
@@ -25,20 +26,31 @@ export default function Index() {
 
 	const loadUserBalance = async () => {
 		try {
+			const { data, error } = await supabase
+				.from('spending')
+				.select(`
+					payment:payment_method(
+						name
+					),
+					sum:amount
+				`)
+				.select('payment(name), sum(amount)')
 
-		const { data, error } = await supabase
-			.from('balancePerPayment') // Name of the VIEW
-			.select('*'); // Select all columns
+			if (error) throw error;
 
-
-		if (error) throw error;
-
+			if (data) {
+				const balances = data.map(item => ({
+					name: item.payment.name,
+					balance: item.sum
+				}));
+				console.log('Balances:', balances);
+				setPaymentBalances(balances);
+			}
 		} catch (error) {
 			console.error('Error:', error);
-			Alert.alert('Error', 'Could not fetch user Balance');
+			Alert.alert('Error', 'Could not fetch balances');
 		}
-
-	}
+	};
 
   const loadPayments = async () => {
     try {
@@ -55,7 +67,6 @@ export default function Index() {
           value: item.id,
         }));
         
-        console.log('Payment methods:', newItems);
         setPaymentMethods(newItems);
       }
     } catch (error) {
@@ -76,7 +87,6 @@ export default function Index() {
 
       if (data) {
         setUserName(data.name);
-        console.log('Username:', data.name);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -166,9 +176,9 @@ export default function Index() {
 		{/* Balances for each of the payment method*/}
 		{ /* For example, for debit card there should not be negative numbers */ }
 
-		{paymentMethods && paymentMethods.length > 0 ? (
-			paymentMethods.map((item: any) => (
-				<Text key={item.label}>{item.label}: {item.value}</Text>
+		{paymentBalances && paymentBalances.length > 0 ? (
+			paymentBalances.map((item: any) => (
+				<Text key={item.name}>{item.name}: {item.balance}</Text>
 			))
 		) : (
 			<Text>Loading your current balance... </Text>
