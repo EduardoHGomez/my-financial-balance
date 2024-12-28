@@ -20,7 +20,25 @@ export default function Index() {
   useEffect(() => {
     getUserData();
 	loadPayments();
+	loadUserBalance();
   }, []);
+
+	const loadUserBalance = async () => {
+		try {
+
+		const { data, error } = await supabase
+			.from('balancePerPayment') // Name of the VIEW
+			.select('*'); // Select all columns
+
+
+		if (error) throw error;
+
+		} catch (error) {
+			console.error('Error:', error);
+			Alert.alert('Error', 'Could not fetch user Balance');
+		}
+
+	}
 
   const loadPayments = async () => {
     try {
@@ -50,14 +68,13 @@ export default function Index() {
     try {
       const { data, error } = await supabase
         .from('user')
-        .select('name, balance')
+        .select('name')
         .eq('name', 'Eduardo')
         .single();
 
       if (error) throw error;
 
       if (data) {
-        setBalance(data.balance);
         setUserName(data.name);
         console.log('Username:', data.name);
       }
@@ -97,9 +114,6 @@ export default function Index() {
     <View style={styles.container}>
 		<Text style={styles.balanceHeader}>
 			Hello, {userName} 
-		</Text>
-		<Text style={styles.balanceHeader}>
-			Balance: {balance} 
 		</Text>
 		
 		<Input
@@ -146,7 +160,21 @@ export default function Index() {
 			containerStyle={styles.buttonContainer}
 			disabled={!description || !amount}
 		/>
+
 		<View style={styles.spacer}/>
+
+		{/* Balances for each of the payment method*/}
+		{ /* For example, for debit card there should not be negative numbers */ }
+
+		{paymentMethods && paymentMethods.length > 0 ? (
+			paymentMethods.map((item: any) => (
+				<Text key={item.label}>{item.label}: {item.value}</Text>
+			))
+		) : (
+			<Text>Loading your current balance... </Text>
+		)}
+
+
     </View>
   );
 }
