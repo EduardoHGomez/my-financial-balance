@@ -13,10 +13,10 @@ export default function Index() {
   const [balance, setBalance] = useState<number>(0);
   const [userName, setUserName] = useState('1000.00');
   const [isIncome, setIsIncome] = useState(false);
-  const [paymentBalances, setPaymentBalances] = useState<any>([]);
 
   // Here useState any is used because the data is not known for a given array
   const [paymentMethods, setPaymentMethods] = useState<any>([]);
+  const [paymentBalances, setPaymentBalances] = useState<any>([]);
 
   useEffect(() => {
     getUserData();
@@ -29,18 +29,13 @@ export default function Index() {
 
 		try {
 			const { data, error } = await supabase
-				.from('spending')
-				.select(``)
+				.rpc('get_payment_summaries');
 
 			if (error) throw error;
 
 			if (data) {
-				const balances = data.map(item => ({
-					name: item.payment.name,
-					balance: item.sum
-				}));
-				console.log('Balances:', balances);
-				setPaymentBalances(balances);
+				console.log('Data received:', data);
+				setPaymentBalances(data);
 			}
 		} catch (error) {
 			console.error('Error:', error);
@@ -99,7 +94,7 @@ export default function Index() {
 				{
 					description,
 					amount: Number(calculatedAmount),
-					payment_method: parseInt(paymentMethod),
+					paymentId: parseInt(paymentMethod),
 				},
 				])
 				.single();
@@ -174,7 +169,7 @@ export default function Index() {
 
 		{paymentBalances && paymentBalances.length > 0 ? (
 			paymentBalances.map((item: any) => (
-				<Text key={item.name}>{item.name}: {item.balance}</Text>
+				<Text key={`b_${item.payment_name}`}>{item.payment_name}: {item.total_amount}</Text>
 			))
 		) : (
 			<Text>Loading your current balances ... </Text>
