@@ -1,9 +1,12 @@
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useState } from 'react';
+import { LineChart } from "react-native-gifted-charts";
 
 export default function GraphScreen() {
     const [selected, setSelected] = useState('1D');
     const options = ['1D', '1W', '1M', '1Y', '5Y'];
+
+    const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 40}];
 
     const handleSelect = (value: string) => {
         setSelected(value);
@@ -38,6 +41,9 @@ export default function GraphScreen() {
                     </TouchableOpacity>
                 ))}
             </View>
+
+            <LineChart data={barData}/>
+
         </View>
     );
 }

@@ -94,7 +94,7 @@ export default function Index() {
 				{
 					description,
 					amount: Number(calculatedAmount),
-					paymentId: parseInt(paymentMethod),
+					payment_id: parseInt(paymentMethod),
 				},
 				])
 				.single();
