@@ -25,16 +25,12 @@ export default function Index() {
   }, []);
 
 	const loadUserBalance = async () => {
+		// Changed this to an RCP
+
 		try {
 			const { data, error } = await supabase
 				.from('spending')
-				.select(`
-					payment:payment_method(
-						name
-					),
-					sum:amount
-				`)
-				.select('payment(name), sum(amount)')
+				.select(``)
 
 			if (error) throw error;
 
@@ -181,7 +177,7 @@ export default function Index() {
 				<Text key={item.name}>{item.name}: {item.balance}</Text>
 			))
 		) : (
-			<Text>Loading your current balance... </Text>
+			<Text>Loading your current balances ... </Text>
 		)}
 
 
