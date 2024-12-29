@@ -24,6 +24,10 @@ export default function Index() {
 	loadUserBalance();
   }, []);
 
+
+  	// TO DO:
+	// Make the user change the color based on the payment method
+
 	const loadUserBalance = async () => {
 		// Changed this to an RCP
 

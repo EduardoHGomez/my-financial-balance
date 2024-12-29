@@ -1,17 +1,29 @@
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useState } from 'react';
 import { LineChart } from "react-native-gifted-charts";
+import { Dimensions } from 'react-native';
 
 export default function GraphScreen() {
     const [selected, setSelected] = useState('1D');
     const options = ['1D', '1W', '1M', '1Y', '5Y'];
 
-    const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 40}];
+    const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 400}];
 
     const handleSelect = (value: string) => {
         setSelected(value);
-        Alert.alert(`Selected: ${value}`);
+        // Alert.alert(`Selected: ${value}`);
     };
+
+    // TO DO:
+
+    // Change the graph and extend up to all the sides and change colors
+
+
+
+    // Use the list to retrieve the data based on 7D, 1W, 1M, 1Y, 5Y
+    // Retrieve the data, use payment type and then story per the last n days
+    // Use the picker for filtering
+    // Mix all the graphs together
 
 
 
@@ -41,8 +53,20 @@ export default function GraphScreen() {
                     </TouchableOpacity>
                 ))}
             </View>
+            
+            <View style={styles.chartContainer}>
+                <LineChart 
+                areaChart 
+                curved 
+                initialSpacing={0}
+                pointerConfig={{}}
+                startFillColor="#ecd59b"
+                startOpacity={0.8}
+                endFillColor="#fcf8ee"
+                endOpacity={0.1}
+                data={barData}/>
 
-            <LineChart areaChart curved data={barData}/>
+            </View>
 
         </View>
     );
@@ -79,4 +103,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
+    chartContainer: {
+        width: Dimensions.get('window').width - 24,
+    }
 });
