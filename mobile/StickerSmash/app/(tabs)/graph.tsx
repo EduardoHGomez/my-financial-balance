@@ -1,13 +1,19 @@
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LineChart } from "react-native-gifted-charts";
 import { Dimensions } from 'react-native';
+import { supabase } from '../../lib/supabase';
 
 export default function GraphScreen() {
-    const [selected, setSelected] = useState('1D');
-    const options = ['1D', '1W', '1M', '1Y', '5Y'];
+    const [selected, setSelected] = useState('7D');
+    const options = ['7D', '1M', '1Y', '5Y'];
+    const [history, setHistory] = useState<any>([]);
 
     const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 400}];
+
+    useEffect(() => {
+        retrieveData();
+    }, []);
 
     const handleSelect = (value: string) => {
         setSelected(value);
@@ -17,10 +23,10 @@ export default function GraphScreen() {
     // TO DO:
 
     // Change the graph and extend up to all the sides and change colors
-
-
-
     // Use the list to retrieve the data based on 7D, 1W, 1M, 1Y, 5Y
+
+
+
     // Retrieve the data, use payment type and then story per the last n days
     // Use the picker for filtering
     // Mix all the graphs together
@@ -29,6 +35,22 @@ export default function GraphScreen() {
 
     // Based on that button, get the range within that data
     const retrieveData = async () => {
+        try {
+            const { data, error } = await supabase
+                .rpc('filter_spending_by_period', {
+                    period: selected,
+                })
+
+            if (error) throw error;
+
+            if (data) {
+                console.log('Data: ', data);
+                setHistory(data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Alert.alert('Error', 'Could not fetch balances');
+        }
 
     }; 
 
