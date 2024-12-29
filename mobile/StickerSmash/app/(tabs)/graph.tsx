@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { LineChart } from "react-native-gifted-charts";
 import { Dimensions } from 'react-native';
 import { supabase } from '../../lib/supabase';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function GraphScreen() {
     const [selected, setSelected] = useState('7D');
@@ -12,29 +13,30 @@ export default function GraphScreen() {
     const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 400}];
 
     useEffect(() => {
-        retrieveData();
+        // retrieveDataPerPeriod();
     }, []);
 
     const handleSelect = (value: string) => {
         setSelected(value);
-        // Alert.alert(`Selected: ${value}`);
+
+        retrieveDataPerPeriod(selected);
     };
 
     // TO DO:
 
     // Change the graph and extend up to all the sides and change colors
     // Use the list to retrieve the data based on 7D, 1W, 1M, 1Y, 5Y
-
-
     // Retrieve the data, use payment type and then story per the last n days (print the results)
 
     // Use the picker for filtering
+
+    // Console log based on the picker and show only that data
     // Mix all the graphs together
 
 
 
     // Based on that button, get the range within that data
-    const retrieveData = async () => {
+    const retrieveDataPerPeriod = async (selected: string) => {
         try {
             const { data, error } = await supabase
                 .rpc('filter_spending_by_period', {
@@ -100,6 +102,22 @@ export default function GraphScreen() {
                 data={barData}/>
 
             </View>
+
+
+		{paymentMethods && paymentMethods.length > 0 ? (
+			<DropDownPicker
+			open={open}
+			value={paymentMethod}
+			items={paymentMethods}
+			setOpen={setOpen}
+			setValue={setPaymentMethod}
+			style={styles.dropdown}
+			containerStyle={styles.dropdownContainer}
+			zIndex={1000}
+			/>
+		) : (
+			<Text style={styles.loadingText}>Loading payment methods...</Text>
+		)}	
 
         </View>
     );
