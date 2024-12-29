@@ -42,7 +42,7 @@ export default function GraphScreen() {
                 ))}
             </View>
 
-            <LineChart data={barData}/>
+            <LineChart areaChart curved data={barData}/>
 
         </View>
     );
