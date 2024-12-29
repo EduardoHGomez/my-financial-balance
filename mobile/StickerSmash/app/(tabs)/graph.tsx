@@ -26,8 +26,8 @@ export default function GraphScreen() {
     // Use the list to retrieve the data based on 7D, 1W, 1M, 1Y, 5Y
 
 
+    // Retrieve the data, use payment type and then story per the last n days (print the results)
 
-    // Retrieve the data, use payment type and then story per the last n days
     // Use the picker for filtering
     // Mix all the graphs together
 
@@ -39,19 +39,30 @@ export default function GraphScreen() {
             const { data, error } = await supabase
                 .rpc('filter_spending_by_period', {
                     period: selected,
-                })
+                });
 
             if (error) throw error;
 
             if (data) {
-                console.log('Data: ', data);
-                setHistory(data);
+                let groupedHistory: { [key: string]: { description: string, payment_date: string }[] } = {};
+                
+                data.forEach((item: any) => {
+                    if (!groupedHistory[item.name]) {
+                        groupedHistory[item.name] = [];
+                    }
+                    groupedHistory[item.name].push({
+                        description: item.description,
+                        payment_date: item.payment_date
+                    });
+                });
+
+                setHistory(groupedHistory);
+                console.log('Grouped History:', groupedHistory);
             }
         } catch (error) {
             console.error('Error:', error);
-            Alert.alert('Error', 'Could not fetch balances');
+            Alert.alert('Error', 'Could not fetch data');
         }
-
     }; 
 
     return (
