@@ -9,9 +9,9 @@ export default function GraphScreen() {
     const [selected, setSelected] = useState('7D');
     const options = ['7D', '1M', '1Y', '5Y'];
     const [history, setHistory] = useState<any>([]);
+    const [goal, setGoal] = useState(null);
     const [goals, setGoals] = useState<any>([]);
     const [open, setOpen] = useState(false);
-    const [goal, setGoal] = useState('hoal');
 
     const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 400}];
 
@@ -76,7 +76,7 @@ export default function GraphScreen() {
             }
         } catch (error) {
             console.error('Error:', error);
-            Alert.alert('Error', 'Could not fetch data');
+            Alert.alert('Error:', 'Could not fetch data');
         }
     }; 
 
@@ -119,11 +119,16 @@ export default function GraphScreen() {
         <View>
             {goals && goals.length > 0 ? (
                 <DropDownPicker
-                value={goal}
-                items={goals}
-                setOpen={setOpen}
-                setValue={setGoals}
-                zIndex={1000}
+                    open={open}
+                    value={goal}
+                    items={goals.map((g: any) => ({
+                        label: g.name,
+                        value: g.id
+                    }))}
+                    setOpen={setOpen}
+                    setValue={setGoal}
+                    setItems={setGoals}
+                    zIndex={1000}
                 />
             ) : (
                 <Text>Loading payment methods...</Text>
