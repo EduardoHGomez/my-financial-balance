@@ -24,17 +24,6 @@ export default function GraphScreen() {
 
     // TO DO:
 
-    // Change the graph and extend up to all the sides and change colors
-    // Use the list to retrieve the data based on 7D, 1W, 1M, 1Y, 5Y
-    // Retrieve the data, use payment type and then story per the last n days (print the results)
-
-    // Use the picker for filtering
-
-    // Console log based on the picker and show only that data
-    // Mix all the graphs together
-
-
-
     // Based on that button, get the range within that data
     const retrieveDataPerPeriod = async (selected: string) => {
         try {
@@ -104,20 +93,6 @@ export default function GraphScreen() {
             </View>
 
 
-		{paymentMethods && paymentMethods.length > 0 ? (
-			<DropDownPicker
-			open={open}
-			value={paymentMethod}
-			items={paymentMethods}
-			setOpen={setOpen}
-			setValue={setPaymentMethod}
-			style={styles.dropdown}
-			containerStyle={styles.dropdownContainer}
-			zIndex={1000}
-			/>
-		) : (
-			<Text style={styles.loadingText}>Loading payment methods...</Text>
-		)}	
 
         </View>
     );
