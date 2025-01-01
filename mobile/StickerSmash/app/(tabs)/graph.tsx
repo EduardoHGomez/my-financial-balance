@@ -9,6 +9,9 @@ export default function GraphScreen() {
     const [selected, setSelected] = useState('7D');
     const options = ['7D', '1M', '1Y', '5Y'];
     const [history, setHistory] = useState<any>([]);
+    const [goals, setGoals] = useState<any>([]);
+    const [open, setOpen] = useState(false);
+    const [goal, setGoal] = useState('hoal');
 
     const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 400}];
 
@@ -18,11 +21,32 @@ export default function GraphScreen() {
 
     const handleSelect = (value: string) => {
         setSelected(value);
+        retrieveGoals();
 
         retrieveDataPerPeriod(selected);
     };
 
     // TO DO:
+
+    const retrieveGoals = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('goals')
+                .select('*');
+
+            if (error) throw error;
+
+            if (data) {
+                console.log('Goals:', data);
+                setGoals(data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Alert.alert('Error', 'Could not fetch goals');
+        }
+
+    };
+
 
     // Based on that button, get the range within that data
     const retrieveDataPerPeriod = async (selected: string) => {
@@ -91,6 +115,21 @@ export default function GraphScreen() {
                 data={barData}/>
 
             </View>
+
+        <View>
+            {goals && goals.length > 0 ? (
+                <DropDownPicker
+                value={goal}
+                items={goals}
+                setOpen={setOpen}
+                setValue={setGoals}
+                zIndex={1000}
+                />
+            ) : (
+                <Text>Loading payment methods...</Text>
+            )}	
+
+        </View>
 
 
 

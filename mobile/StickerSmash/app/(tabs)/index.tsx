@@ -179,6 +179,9 @@ export default function Index() {
 			<Text>Loading your current balances ... </Text>
 		)}
 
+		<View style={styles.spacer}/>
+
+
 
     </View>
   );
