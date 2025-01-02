@@ -9,21 +9,20 @@ export default function GraphScreen() {
     const [selected, setSelected] = useState('7D');
     const options = ['7D', '1M', '1Y', '5Y'];
     const [history, setHistory] = useState<any>([]);
-    const [goal, setGoal] = useState(null);
+    const [goal, setGoal] = useState<number>(200);
     const [goals, setGoals] = useState<any>([]);
     const [open, setOpen] = useState(false);
 
-    const barData = [{value: 15}, {value: 30}, {value: 26}, {value: 400}];
+    const [barData, setBarData] = useState([{value: 15}, {value: 30}, {value: 26}, {value: 400}]);
 
     useEffect(() => {
-        // retrieveDataPerPeriod();
+        retrieveDataPerPeriod();
     }, []);
 
     const handleSelect = (value: string) => {
         setSelected(value);
         retrieveGoals();
 
-        retrieveDataPerPeriod(selected);
     };
 
     // TO DO:
@@ -37,7 +36,7 @@ export default function GraphScreen() {
             if (error) throw error;
 
             if (data) {
-                console.log('Goals:', data);
+                //console.log('Goals:', data);
                 setGoals(data);
             }
         } catch (error) {
@@ -49,30 +48,27 @@ export default function GraphScreen() {
 
 
     // Based on that button, get the range within that data
-    const retrieveDataPerPeriod = async (selected: string) => {
+    const retrieveDataPerPeriod = async () => {
         try {
             const { data, error } = await supabase
-                .rpc('filter_spending_by_period', {
-                    period: selected,
+                .rpc('filter_by_payment_and_period', {
+                    payment_name: 'BBVA Debit',
+                    period: '7D'
                 });
 
             if (error) throw error;
 
             if (data) {
-                let groupedHistory: { [key: string]: { description: string, payment_date: string }[] } = {};
-                
-                data.forEach((item: any) => {
-                    if (!groupedHistory[item.name]) {
-                        groupedHistory[item.name] = [];
-                    }
-                    groupedHistory[item.name].push({
-                        description: item.description,
-                        payment_date: item.payment_date
-                    });
-                });
 
-                setHistory(groupedHistory);
-                console.log('Grouped History:', groupedHistory);
+                console.log('Data:', data);
+                let newBarData: ((prevState: { value: number; }[]) => { value: number; }[]) | { value: any; }[] = [];
+                data.map((item: any) => {
+
+                    newBarData.push({value: item.remaining_balance});
+
+
+                });
+                setBarData(newBarData);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -134,6 +130,15 @@ export default function GraphScreen() {
                 <Text>Loading payment methods...</Text>
             )}	
 
+        </View>
+
+        {/* Horizontal chart */}
+        <View>
+            {goal ? (
+                <Text>{goal}</Text>
+            ) : (
+                <Text>No goal selected</Text>
+            )}
         </View>
 
 

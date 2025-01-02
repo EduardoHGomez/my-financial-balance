@@ -38,7 +38,7 @@ export default function Index() {
 			if (error) throw error;
 
 			if (data) {
-				console.log('Data received:', data);
+				//console.log('Data received:', data);
 				setPaymentBalances(data);
 			}
 		} catch (error) {
@@ -61,7 +61,7 @@ export default function Index() {
           label: item.name,
           value: item.id,
         }));
-        
+
         setPaymentMethods(newItems);
       }
     } catch (error) {
@@ -104,6 +104,7 @@ export default function Index() {
 				.single();
 
 			if (error) throw error;
+
 
 			Alert.alert('Success', 'Transaction added successfully!');
 			setDescription('');
