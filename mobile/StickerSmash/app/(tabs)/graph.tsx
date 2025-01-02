@@ -31,7 +31,8 @@ export default function GraphScreen() {
         try {
             const { data, error } = await supabase
                 .from('goals')
-                .select('*');
+                .select('*')
+                .order('payment_date', { ascending: true });
 
             if (error) throw error;
 
