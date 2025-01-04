@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet, Alert, Platform, Text } from 'react-native';
+import { View, StyleSheet, Alert, Platform, Text, TouchableOpacity } from 'react-native';
 import { Input, Button, Switch } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
@@ -25,8 +25,6 @@ export default function Index() {
 	}, []);
 
 
-  	// TO DO:
-	// Make the user change the color based on the payment method
 
 	const loadUserBalance = async () => {
 		// Changed this to an RCP
@@ -156,17 +154,38 @@ export default function Index() {
 		) : (
 			<Text style={styles.loadingText}>Loading payment methods...</Text>
 		)}	
-		<View style={styles.toggleContainer}>
-			<Text style={[styles.toggleText, { color: isIncome ? '#4CAF50' : '#F44336' }]}>
-				{isIncome ? 'Income' : 'Expense'}
-			</Text>
-			<Switch
-				value={isIncome}
-				onValueChange={setIsIncome}
-				color="#4CAF50"
-				trackColor={{ false: '#F44336', true: '#4CAF50' }}
-				thumbColor="#ffffff"
-			/>
+		<View style={styles.radioGroupContainer}>
+			<TouchableOpacity
+				style={[
+				styles.radioButton,
+				isIncome && styles.radioButtonSelected,
+				styles.radioButtonFirst
+				]}
+				onPress={() => setIsIncome(true)}
+			>
+				<Text style={[
+				styles.radioButtonText,
+				isIncome && styles.radioButtonTextSelected
+				]}>
+				{"💵 Income "}
+				</Text>
+			</TouchableOpacity>
+			
+			<TouchableOpacity
+				style={[
+				styles.radioButton,
+				!isIncome && styles.radioButtonSelected,
+				styles.radioButtonLast
+				]}
+				onPress={() => setIsIncome(false)}
+			>
+				<Text style={[
+				styles.radioButtonText,
+				!isIncome && styles.radioButtonTextSelected
+				]}>
+				{" 💰 Expense"}
+				</Text>
+			</TouchableOpacity>
 		</View>
 		<Button
 			title="Submit"
@@ -248,5 +267,38 @@ const styles = StyleSheet.create({
 	toggleText: {
 		fontSize: 16,
 		fontWeight: '500',
-	}
+	},
+	radioGroupContainer: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		marginVertical: 10,
+		marginHorizontal: 10,
+	},
+	radioButton: {
+		padding: 12,
+		backgroundColor: '#fff',
+		borderWidth: 1,
+		borderColor: '#b5bfd9',
+	},
+	radioButtonFirst: {
+		borderTopLeftRadius: 6,
+		borderBottomLeftRadius: 6,
+	},
+	radioButtonLast: {
+		borderTopRightRadius: 6,
+		borderBottomRightRadius: 6,
+	},
+	radioButtonSelected: {
+		backgroundColor: '#dee7ff',
+		borderColor: '#0043ed',
+		zIndex: 1,
+	},
+	radioButtonText: {
+		color: '#3e4963',
+		fontSize: 14,
+		letterSpacing: 0.5,
+	},
+	radioButtonTextSelected: {
+		color: '#0043ed',
+	},
 });
