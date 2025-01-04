@@ -6,23 +6,23 @@ import { supabase } from '../../lib/supabase';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Index() {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [open, setOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('1');
-  const [balance, setBalance] = useState<number>(0);
-  const [userName, setUserName] = useState('1000.00');
-  const [isIncome, setIsIncome] = useState(false);
+	const [description, setDescription] = useState('');
+	const [amount, setAmount] = useState('');
+	const [paymentMethod, setPaymentMethod] = useState('1');
 
-  // Here useState any is used because the data is not known for a given array
-  const [paymentMethods, setPaymentMethods] = useState<any>([]);
-  const [paymentBalances, setPaymentBalances] = useState<any>([]);
+	const [open, setOpen] = useState(false);
+	const [userName, setUserName] = useState('1000.00');
+	const [isIncome, setIsIncome] = useState(false);
 
-  useEffect(() => {
-    getUserData();
-	loadPayments();
-	loadUserBalance();
-  }, []);
+	// Here useState any is used because the data is not known for a given array
+	const [paymentMethods, setPaymentMethods] = useState<any>([]);
+	const [paymentBalances, setPaymentBalances] = useState<any>([]);
+
+	useEffect(() => {
+		getUserData();
+		loadPayments();
+		loadUserBalance();
+	}, []);
 
 
   	// TO DO:
@@ -89,8 +89,12 @@ export default function Index() {
     }
   };
 
-	const handleSubmit = async () => {
+	const submitSpending = async () => {
 		const calculatedAmount = isIncome ? amount : -Math.abs(Number(amount));	
+
+		// Insert only description, amount, payment_type
+		console.log({ description, amount, paymentMethod });
+
 		try {
 			const { data, error } = await supabase
 				.from('spending')
@@ -103,17 +107,22 @@ export default function Index() {
 				])
 				.single();
 
-			if (error) throw error;
-
+			if (error) {
+				throw error;
+			}
 
 			Alert.alert('Success', 'Transaction added successfully!');
-			setDescription('');
-			setAmount('0');
-			setPaymentMethod('1');
 		} catch (error) {
 			console.error('Error:', error);
 			Alert.alert('Error', 'Failed to add transaction');
 		}
+
+		// Set data back to default
+		setDescription('');
+		setAmount('');
+		setPaymentMethod('1');
+
+
 	};
 
   return (
@@ -129,7 +138,7 @@ export default function Index() {
 		/>
 		<Input
 			placeholder="Amount"
-			keyboardType="numeric"
+			keyboardType="number-pad"
 			value={amount}
 			onChangeText={setAmount}
 		/>
@@ -161,7 +170,7 @@ export default function Index() {
 		</View>
 		<Button
 			title="Submit"
-			onPress={handleSubmit}
+			onPress={submitSpending}
 			buttonStyle={styles.button}
 			containerStyle={styles.buttonContainer}
 			disabled={!description || !amount}
