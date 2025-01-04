@@ -154,39 +154,50 @@ export default function Index() {
 		) : (
 			<Text style={styles.loadingText}>Loading payment methods...</Text>
 		)}	
+
+
+		{/* Radio buttons for income and expense */}
 		<View style={styles.radioGroupContainer}>
+			{/* Used this TouchableOpacity for the dimming and fading of the button after pressing */}
+			{/* Although the documentation says it recommends Pressable */}
+
 			<TouchableOpacity
 				style={[
-				styles.radioButton,
-				isIncome && styles.radioButtonSelected,
-				styles.radioButtonFirst
+					styles.radioButton,
+					styles.radioButtonIncome,
+					isIncome && styles.radioButtonIncomeSelected
 				]}
 				onPress={() => setIsIncome(true)}
 			>
 				<Text style={[
-				styles.radioButtonText,
-				isIncome && styles.radioButtonTextSelected
+					styles.radioButtonText,
+					isIncome && { color: 'green' },
+					styles.radioButtonSelectedText,
 				]}>
-				{"💵 Income "}
+					{"💵 Income "}
 				</Text>
 			</TouchableOpacity>
 			
 			<TouchableOpacity
 				style={[
-				styles.radioButton,
-				!isIncome && styles.radioButtonSelected,
-				styles.radioButtonLast
+					styles.radioButton,
+					styles.radioButtonExpense,
+					!isIncome && styles.radioButtonExpenseSelected,
 				]}
 				onPress={() => setIsIncome(false)}
 			>
 				<Text style={[
-				styles.radioButtonText,
-				!isIncome && styles.radioButtonTextSelected
+					styles.radioButtonText,
+					!isIncome && { color: 'red' },
+					styles.radioButtonSelectedText
 				]}>
 				{" 💰 Expense"}
 				</Text>
 			</TouchableOpacity>
 		</View>
+		
+
+
 		<Button
 			title="Submit"
 			onPress={submitSpending}
@@ -268,6 +279,10 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: '500',
 	},
+
+
+
+
 	radioGroupContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
@@ -278,27 +293,34 @@ const styles = StyleSheet.create({
 		padding: 12,
 		backgroundColor: '#fff',
 		borderWidth: 1,
-		borderColor: '#b5bfd9',
+		borderColor: '#c8d7d9',
 	},
-	radioButtonFirst: {
-		borderTopLeftRadius: 6,
-		borderBottomLeftRadius: 6,
+	radioButtonIncome: {
+		borderTopLeftRadius: 8,
+		borderBottomLeftRadius: 8,
 	},
-	radioButtonLast: {
-		borderTopRightRadius: 6,
-		borderBottomRightRadius: 6,
+	radioButtonExpense: {
+		borderTopRightRadius: 8,
+		borderBottomRightRadius: 8,
 	},
-	radioButtonSelected: {
-		backgroundColor: '#dee7ff',
-		borderColor: '#0043ed',
+	radioButtonIncomeSelected: {
+		backgroundColor: '#f2ffe5',
+		borderColor: '#255b01',
+		borderWidth: 1,
+	},
+	radioButtonExpenseSelected: {
+		borderColor: '#a50f0f',
+		backgroundColor: '#fff1f1',
 		zIndex: 1,
 	},
 	radioButtonText: {
-		color: '#3e4963',
 		fontSize: 14,
 		letterSpacing: 0.5,
 	},
-	radioButtonTextSelected: {
-		color: '#0043ed',
+	radioButtonSelectedText: {
+		fontWeight: 'bold',
 	},
+
+
+
 });
