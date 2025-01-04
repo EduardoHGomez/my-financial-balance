@@ -7,17 +7,55 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Index() {
 
-  useEffect(() => {
-  }, []);
+    const [history, setHistory] = useState<any>([]);
 
 
-  return (
-    <View>
+    useEffect(() => {
+        retrieveHistory();
+    }, []);
+
+    const retrieveHistory = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('spending')
+                .select('*')
+                .order('payment_date', { ascending: true });
+
+            if (error) throw error;
+
+            if (data) {
+                setHistory(data);
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+            Alert.alert('Error', 'Could not fetch history');
+        }
+    };
 
 
-    </View>
-  );
+
+    return (
+        <View>
+
+            <Button
+                title="Submit"
+            />
+
+            {history.map((item: any) => {
+                return (
+                    <View key={item.id}>
+                        <Text>{item.description}</Text>
+                        <Text>{item.amount}</Text>
+                        <Text>{item.payment_date}</Text>
+                    </View>
+                );
+            })};
+
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
+
 });
