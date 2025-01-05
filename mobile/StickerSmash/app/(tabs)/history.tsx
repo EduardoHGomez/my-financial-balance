@@ -4,6 +4,7 @@ import { Input, Button, Switch } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
 import { ScrollView } from 'react-native-gesture-handler';
+import HistoryItem from '@/components/HistoryItem';
 
 export default function Index() {
 
@@ -44,11 +45,9 @@ export default function Index() {
 
             {history.map((item: any) => {
                 return (
-                    <View key={item.id}>
-                        <Text>{item.description}</Text>
-                        <Text>{item.amount}</Text>
-                        <Text>{item.payment_date}</Text>
-                    </View>
+                    <HistoryItem key={item.id} item={item}>
+
+                    </HistoryItem>
                 );
             })};
 
