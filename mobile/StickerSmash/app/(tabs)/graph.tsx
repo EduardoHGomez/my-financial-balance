@@ -53,7 +53,7 @@ export default function GraphScreen() {
         try {
             const { data, error } = await supabase
                 .rpc('filter_by_payment_and_period', {
-                    payment_name: 'BBVA Debit',
+                    payment_name: 'Banamex',
                     period: '7D'
                 });
 

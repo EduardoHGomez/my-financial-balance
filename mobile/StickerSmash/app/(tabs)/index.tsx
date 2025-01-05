@@ -165,16 +165,17 @@ export default function Index() {
 				style={[
 					styles.radioButton,
 					styles.radioButtonIncome,
-					isIncome && styles.radioButtonIncomeSelected
+					isIncome && styles.radioButtonIncomeSelected,
+					!isIncome && { borderRightColor: 'transparent' },
 				]}
 				onPress={() => setIsIncome(true)}
 			>
 				<Text style={[
 					styles.radioButtonText,
-					isIncome && { color: 'green' },
 					styles.radioButtonSelectedText,
+					{ color: 'green' },
 				]}>
-					{"💵 Income "}
+					{" 🤑 Income "}
 				</Text>
 			</TouchableOpacity>
 			
@@ -183,15 +184,16 @@ export default function Index() {
 					styles.radioButton,
 					styles.radioButtonExpense,
 					!isIncome && styles.radioButtonExpenseSelected,
+					isIncome && { borderLeftColor: 'transparent' },
 				]}
 				onPress={() => setIsIncome(false)}
 			>
 				<Text style={[
 					styles.radioButtonText,
-					!isIncome && { color: 'red' },
-					styles.radioButtonSelectedText
+					styles.radioButtonSelectedText,
+					{ color: 'red' },
 				]}>
-				{" 💰 Expense"}
+				{" 💸 Expense"}
 				</Text>
 			</TouchableOpacity>
 		</View>
