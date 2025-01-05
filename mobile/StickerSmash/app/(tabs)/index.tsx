@@ -27,7 +27,6 @@ export default function Index() {
 
 
 	const loadUserBalance = async () => {
-		// Changed this to an RCP
 
 		try {
 			const { data, error } = await supabase
@@ -282,9 +281,6 @@ const styles = StyleSheet.create({
 		fontWeight: '500',
 	},
 
-
-
-
 	radioGroupContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
@@ -298,12 +294,12 @@ const styles = StyleSheet.create({
 		borderColor: '#c8d7d9',
 	},
 	radioButtonIncome: {
-		borderTopLeftRadius: 8,
-		borderBottomLeftRadius: 8,
+		borderTopLeftRadius: 6,
+		borderBottomLeftRadius: 6,
 	},
 	radioButtonExpense: {
-		borderTopRightRadius: 8,
-		borderBottomRightRadius: 8,
+		borderTopRightRadius: 6,
+		borderBottomRightRadius: 6,
 	},
 	radioButtonIncomeSelected: {
 		backgroundColor: '#f2ffe5',

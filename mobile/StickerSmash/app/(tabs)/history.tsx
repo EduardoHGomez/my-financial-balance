@@ -38,17 +38,6 @@ export default function Index() {
 
     return (
         <View>
-
-            <View >
-                {history.map((item: any) => {
-                    return (
-                        <HistoryItem key={item.id} item={item}>
-                        </HistoryItem>
-                    );
-                })};
-
-            </View>
-
         </View>
     );
 }

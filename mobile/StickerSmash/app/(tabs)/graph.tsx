@@ -21,8 +21,7 @@ export default function GraphScreen() {
 
     const handleSelect = (value: string) => {
         setSelected(value);
-        retrieveGoals();
-
+        // retrieveGoals();
     };
 
     // TO DO:
@@ -112,36 +111,6 @@ export default function GraphScreen() {
                 data={barData}/>
 
             </View>
-
-        <View>
-            {goals && goals.length > 0 ? (
-                <DropDownPicker
-                    open={open}
-                    value={goal}
-                    items={goals.map((g: any) => ({
-                        label: g.name,
-                        value: g.id
-                    }))}
-                    setOpen={setOpen}
-                    setValue={setGoal}
-                    setItems={setGoals}
-                    zIndex={1000}
-                />
-            ) : (
-                <Text>Loading payment methods...</Text>
-            )}	
-
-        </View>
-
-        {/* Horizontal chart */}
-        <View>
-            {goal ? (
-                <Text>{goal}</Text>
-            ) : (
-                <Text>No goal selected</Text>
-            )}
-        </View>
-
 
 
         </View>
