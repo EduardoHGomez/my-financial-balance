@@ -39,22 +39,22 @@ export default function Index() {
     return (
         <View>
 
-            <Button
-                title="Submit"
-            />
+            <View >
+                {history.map((item: any) => {
+                    return (
+                        <HistoryItem key={item.id} item={item}>
+                        </HistoryItem>
+                    );
+                })};
 
-            {history.map((item: any) => {
-                return (
-                    <HistoryItem key={item.id} item={item}>
-
-                    </HistoryItem>
-                );
-            })};
+            </View>
 
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    historyContainer: {
+    }
 
 });
