@@ -4,6 +4,7 @@ import { Input, Button, Switch } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
 import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import HistoryItem from '@/components/HistoryItem';
 
 export default function Index() {
@@ -36,14 +37,16 @@ export default function Index() {
     };
 
     return (
-        <ScrollView 
-            style={styles.container} 
-            contentContainerStyle={styles.contentContainer}
-        >
-            {history.map((item: any) => {
-                return <HistoryItem key={item.id} item={item} />
-            })}
-        </ScrollView>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <ScrollView 
+                style={styles.container} 
+                contentContainerStyle={styles.contentContainer}
+            >
+                {history.map((item: any) => {
+                    return <HistoryItem key={item.id} data={item} />
+                })}
+            </ScrollView>
+        </GestureHandlerRootView>
     );
 }
 
