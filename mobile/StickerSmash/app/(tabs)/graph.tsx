@@ -103,6 +103,8 @@ export default function GraphScreen() {
                 areaChart 
                 curved 
                 initialSpacing={0}
+                color="#fcf8ed"
+                hideRules
                 startFillColor="#ecd59b"
                 startOpacity={1}
                 endFillColor="#fcf8ee"
