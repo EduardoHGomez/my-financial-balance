@@ -134,10 +134,15 @@ export default function Index() {
 			onChangeText={setDescription}
 		/>
 		<Input
-			placeholder="Amount"
+			placeholder="$ 00.00"
 			keyboardType="number-pad"
 			value={amount}
-			onChangeText={setAmount}
+			onChangeText={(value) => {
+				var newValue = value;	
+				// Algorithm for writing up to 2 decimal places
+
+				setAmount();
+			}}
 		/>
 		{paymentMethods && paymentMethods.length > 0 ? (
 			<DropDownPicker
