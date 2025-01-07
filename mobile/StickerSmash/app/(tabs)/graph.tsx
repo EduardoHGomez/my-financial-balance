@@ -100,18 +100,31 @@ export default function GraphScreen() {
             
             <View style={styles.chartContainer}>
                 <LineChart 
-                areaChart 
-                curved 
-                initialSpacing={0}
-                color="#0079dc"
-                hideRules
-                startFillColor="#9dccf3"
-                startOpacity={1}
-                endFillColor="#a4d5f3"
-                endOpacity={0.3}
-                width={300}
-                xAxisType='solid'
-                data={barData}
+                    areaChart 
+                    color="#0079dc"
+                    curved
+                    data={barData}
+                    endFillColor="#a4d5f3"
+                    endOpacity={0.3}
+                    hideRules
+                    initialSpacing={0}
+                    pointerConfig={{
+                        pointerColor: '0079dc',
+                        showPointerStrip: false,
+                        pointerLabelComponent: () => {
+                            return (
+                                <View style={{ backgroundColor: 'white', padding: 4, borderRadius: 4 }}>
+                                    <Text style={{ color: 'black' }}>Hola</Text>
+                                </View>
+                            );
+                        }
+                    }}
+                    startFillColor="#9dccf3"
+                    startOpacity={1}
+                    width={300}
+                    xAxisColor="transparent"
+                    xAxisType='solid'
+                    yAxisColor="transparent"
                 />
 
             </View>
@@ -152,6 +165,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     chartContainer: {
+        marginBottom: 12,
+        borderBlockColor: 'red',
         marginTop: 12,
     }
 });
