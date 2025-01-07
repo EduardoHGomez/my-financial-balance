@@ -26,6 +26,7 @@ export default function Index() {
 
             if (data) {
                 setHistory(data);
+                console.log(data);
             }
         }
         catch (error) {
@@ -35,13 +36,22 @@ export default function Index() {
     };
 
     return (
-        <View>
-        </View>
+        <ScrollView 
+            style={styles.container} 
+            contentContainerStyle={styles.contentContainer}
+        >
+            {history.map((item: any) => {
+                return <HistoryItem key={item.id} item={item} />
+            })}
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    historyContainer: {
+    container: {
+        flex: 1,
+    },
+    contentContainer: {
+        paddingVertical: 10,
     }
-
 });

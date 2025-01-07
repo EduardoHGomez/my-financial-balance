@@ -103,11 +103,11 @@ export default function GraphScreen() {
                 areaChart 
                 curved 
                 initialSpacing={0}
-                color="#fcf8ed"
+                color="#0079dc"
                 hideRules
-                startFillColor="#ecd59b"
+                startFillColor="#9dccf3"
                 startOpacity={1}
-                endFillColor="#fcf8ee"
+                endFillColor="#a4d5f3"
                 endOpacity={0.3}
                 width={300}
                 xAxisType='solid'
@@ -124,7 +124,6 @@ export default function GraphScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f0f0f0',
         padding: 12,
     },
     radioGroup: {
@@ -153,5 +152,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     chartContainer: {
+        marginTop: 12,
     }
 });
