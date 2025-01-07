@@ -4,10 +4,11 @@ import { Input, Button, Switch } from 'react-native-elements';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { supabase } from '../../lib/supabase';
 import { ScrollView } from 'react-native-gesture-handler';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function Index() {
 	const [description, setDescription] = useState('');
-	const [amount, setAmount] = useState('');
+	const [amount, setAmount] = useState<string>('');
 	const [paymentMethod, setPaymentMethod] = useState('1');
 
 	const [open, setOpen] = useState(false);
@@ -122,6 +123,12 @@ export default function Index() {
 
 	};
 
+	const getDisplayedValue = () => {
+		console.log(amount);
+	};
+
+	getDisplayedValue();
+
   return (
     <View style={styles.container}>
 		<Text style={styles.balanceHeader}>
@@ -138,11 +145,10 @@ export default function Index() {
 			keyboardType="number-pad"
 			value={amount}
 			onChangeText={(value) => {
-				var newValue = value;	
-				// Algorithm for writing up to 2 decimal places
-
-				setAmount();
+				setAmount(value);
+			
 			}}
+
 		/>
 		{paymentMethods && paymentMethods.length > 0 ? (
 			<DropDownPicker
