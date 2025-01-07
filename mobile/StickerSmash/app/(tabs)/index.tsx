@@ -123,12 +123,6 @@ export default function Index() {
 
 	};
 
-	const getDisplayedValue = () => {
-		console.log(amount);
-	};
-
-	getDisplayedValue();
-
   return (
     <View style={styles.container}>
 		<Text style={styles.balanceHeader}>
@@ -142,14 +136,13 @@ export default function Index() {
 		/>
 		<Input
 			placeholder="$ 00.00"
-			keyboardType="number-pad"
-			value={amount}
+			keyboardType="numeric"
+			value={amount} 
 			onChangeText={(value) => {
 				setAmount(value);
-			
 			}}
-
 		/>
+
 		{paymentMethods && paymentMethods.length > 0 ? (
 			<DropDownPicker
 			open={open}
