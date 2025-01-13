@@ -10,28 +10,51 @@ import HistoryItem from '@/components/HistoryItem';
 export default function Index() {
 
     const [history, setHistory] = useState<any>([]);
-
+    const [paymentMethod, setPaymentMethod] = useState<string>('1');
+    const [paymentMethods, setPaymentMethods] = useState<any>([]);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        retrieveHistory();
-    }, []);
+        getPaymentMethods();
+        // retrieveHistory();
+    }, [paymentMethod]); // Re-fetch when payment method changes
+
+    const getPaymentMethods = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('payment_methods')
+                .select('*')
+                .order('id', { ascending: true });
+
+            if (error) throw error;
+
+            if (data) {
+                const formattedData = data.map(method => ({
+                    label: method.name,
+                    value: method.id.toString()
+                }));
+                setPaymentMethods(formattedData);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Could not fetch payment methods');
+        }
+    };
 
     const retrieveHistory = async () => {
         try {
             const { data, error } = await supabase
                 .from('spending')
                 .select('*')
+                .eq('payment_id', paymentMethod)
                 .order('payment_date', { ascending: true });
 
             if (error) throw error;
 
             if (data) {
                 setHistory(data);
-                console.log(data);
             }
         }
         catch (error) {
-            console.error('Error:', error);
             Alert.alert('Error', 'Could not fetch history');
         }
     };
@@ -42,6 +65,20 @@ export default function Index() {
                 style={styles.container} 
                 contentContainerStyle={styles.contentContainer}
             >
+
+                <DropDownPicker
+                open={open}
+                value={paymentMethod}
+                items={paymentMethods}
+                setOpen={setOpen}
+                setValue={setPaymentMethod}
+                style={styles.dropdown}
+                containerStyle={styles.dropdownContainer}
+                zIndex={1000}
+                />
+
+
+
                 {history.map((item: any) => {
                     return <HistoryItem key={item.id} data={item} />
                 })}
@@ -56,5 +93,14 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingVertical: 10,
+    },
+    dropdown: {
+        backgroundColor: '#fafafa',
+        borderWidth: 0,
+        marginHorizontal: 10,
+        marginBottom: 10,
+    },
+    dropdownContainer: {
+        marginTop: 10,
     }
 });

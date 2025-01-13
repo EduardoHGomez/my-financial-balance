@@ -89,6 +89,7 @@ export default function Index() {
 
 	const submitSpending = async () => {
 		const calculatedAmount = isIncome ? amount : -Math.abs(Number(amount));	
+		const newDescription = description.trim();
 
 		// Insert only description, amount, payment_type
 		console.log({ description, amount, paymentMethod });
@@ -98,7 +99,7 @@ export default function Index() {
 				.from('spending')
 				.insert([
 				{
-					description,
+					newDescription,
 					amount: Number(calculatedAmount),
 					payment_id: parseInt(paymentMethod),
 				},
