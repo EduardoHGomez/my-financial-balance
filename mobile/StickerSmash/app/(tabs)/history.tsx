@@ -15,28 +15,30 @@ export default function Index() {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        getPaymentMethods();
-        // retrieveHistory();
-    }, [paymentMethod]); // Re-fetch when payment method changes
+        loadPayments();
+        retrieveHistory();
+    }, [paymentMethod]); 
 
-    const getPaymentMethods = async () => {
+    const loadPayments = async () => {
         try {
-            const { data, error } = await supabase
-                .from('payment_methods')
-                .select('*')
-                .order('id', { ascending: true });
+        const { data, error } = await supabase
+            .from('payment')
+            .select('*')
+            .order('name', { ascending: true });
 
-            if (error) throw error;
+        if (error) throw error;
 
-            if (data) {
-                const formattedData = data.map(method => ({
-                    label: method.name,
-                    value: method.id.toString()
-                }));
-                setPaymentMethods(formattedData);
-            }
+        if (data) {
+            const newItems = data.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+            }));
+
+            setPaymentMethods(newItems);
+        }
         } catch (error) {
-            Alert.alert('Error', 'Could not fetch payment methods');
+        console.error('Error:', error);
+        Alert.alert('Error', 'Could not fetch payment methods');
         }
     };
 
@@ -61,12 +63,7 @@ export default function Index() {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ScrollView 
-                style={styles.container} 
-                contentContainerStyle={styles.contentContainer}
-            >
-
-                <DropDownPicker
+            <DropDownPicker
                 open={open}
                 value={paymentMethod}
                 items={paymentMethods}
@@ -75,10 +72,11 @@ export default function Index() {
                 style={styles.dropdown}
                 containerStyle={styles.dropdownContainer}
                 zIndex={1000}
-                />
-
-
-
+            />
+            <ScrollView 
+                style={styles.container} 
+                contentContainerStyle={styles.contentContainer}
+            >
                 {history.map((item: any) => {
                     return <HistoryItem key={item.id} data={item} />
                 })}
