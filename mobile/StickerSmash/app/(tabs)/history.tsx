@@ -12,12 +12,17 @@ export default function Index() {
     const [history, setHistory] = useState<any>([]);
     const [paymentMethod, setPaymentMethod] = useState<string>('1');
     const [paymentMethods, setPaymentMethods] = useState<any>([]);
-    const [open, setOpen] = useState(false);
+    const [openPayment, setOpenPayment] = useState(false);
+
+    const [category, setCategory] = useState<string>('1');
+    const [categories, setCategories] = useState<any>([]);
+    const [openCategory, setOpenCategory] = useState(false);
 
     useEffect(() => {
         loadPayments();
+        loadCategories();
         retrieveHistory();
-    }, [paymentMethod]); 
+    }, [paymentMethod, category]); 
 
     const loadPayments = async () => {
         try {
@@ -42,12 +47,36 @@ export default function Index() {
         }
     };
 
+    const loadCategories = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('category')
+                .select('*')
+                .order('name', { ascending: true });
+
+            if (error) throw error;
+
+            if (data) {
+                const newItems = data.map((item: any) => ({
+                    label: item.name,
+                    value: item.id,
+                }));
+
+                setCategories(newItems);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Alert.alert('Error', 'Could not fetch categories');
+        }
+    };
+
     const retrieveHistory = async () => {
         try {
             const { data, error } = await supabase
                 .from('spending')
                 .select('*')
                 .eq('payment_id', paymentMethod)
+                .eq('category_id', category)
                 .order('payment_date', { ascending: true });
 
             if (error) throw error;
@@ -64,14 +93,24 @@ export default function Index() {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <DropDownPicker
-                open={open}
+                open={openPayment}
                 value={paymentMethod}
                 items={paymentMethods}
-                setOpen={setOpen}
+                setOpen={setOpenPayment}
                 setValue={setPaymentMethod}
                 style={styles.dropdown}
                 containerStyle={styles.dropdownContainer}
                 zIndex={1000}
+            />
+            <DropDownPicker
+                open={openCategory}
+                value={category}
+                items={categories}
+                setOpen={setOpenCategory}
+                setValue={setCategory}
+                style={styles.dropdown}
+                containerStyle={styles.dropdownContainer}
+                zIndex={900}
             />
             <ScrollView 
                 style={styles.container} 
